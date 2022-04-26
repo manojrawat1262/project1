@@ -14,7 +14,7 @@
         <ul class="breadcrumb">
             <li><a href="index.html">Home</a></li>
             <li><a href="">Store</a></li>
-            <li class="active">{{cat_name}}category</li>
+            <li class="active">{{cat_name}}</li>
         </ul>
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40">
@@ -102,7 +102,7 @@
 
             <div class="row product-list">
               <!-- PRODUCT ITEM START -->
-              {% for products in category_products %}
+              {% for products in subcategory_products %}
               <div class="col-md-4 col-sm-6 col-xs-12">
                 <div class="product-item">
                   <div class="pi-img-wrapper">
