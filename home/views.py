@@ -55,9 +55,9 @@ class SubCategoryView(BaseView):
 class SearchView(BaseView):
 	def get(self,request):
 		if request.method == 'GET':
-		query = request.GET['query']
-		self.views['search_products'] = Product.objects.filter((name_icontains = query) | (description_icontains = query))
-		lookups= Q(title_icontains = query ) | Q(description_icontains = query ) 
-		self.views['search_products'] = Product.objects.filter(lookups).distinct()
+			query = request.GET['query']
+			# self.views['search_products'] = Product.objects.filter((name_icontains = query) | (description_icontains = query))
+			lookups= Q(title_icontains = query ) | Q(description_icontains = query ) 
+			self.views['search_products'] = Product.objects.filter(lookups).distinct()
 
 		return render(request,'shop-search-result.html',self.views)
