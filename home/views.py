@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import*
 # Create your views here.
 from django.views.generic import View
@@ -51,13 +51,53 @@ class SubCategoryView(BaseView):
 
 		return render(request,'subcategory.html',self.views)
 
-
+from django.db.models import Q
 class SearchView(BaseView):
 	def get(self,request):
 		if request.method == 'GET':
 			query = request.GET['query']
 			# self.views['search_products'] = Product.objects.filter((name_icontains = query) | (description_icontains = query))
-			lookups= Q(title_icontains = query ) | Q(description_icontains = query ) 
+			lookups= Q(name__icontains = query ) | Q(description__icontains = query ) 
 			self.views['search_products'] = Product.objects.filter(lookups).distinct()
+			self.views['search_for'] = query
 
 		return render(request,'shop-search-result.html',self.views)
+
+from django.contrib import messages
+from django.contrib.auth.models import User
+
+def signup(request):
+	if request.method == 'POST':
+		username = request.POST['username']
+		email = request.POST['email']
+		password = request.POST['password']
+		cpassword = request.POST['cpassword']
+
+
+		if password == cpassword:
+			if User.objects.filter(username = username).exists():
+				message.error(request,'the username is already taken')
+				return render(request,'shop-standart-forms.html')
+			elif User.objects.filter(email = email).exists():
+				message.error(request,'the email is already taken')
+				return render(request,'shop-standart-forms.html')
+				return redirect('/signup')
+
+			else:
+				user = User.objects.create_user(
+					username = username,
+					email = email,
+					password = password
+
+					)
+				user.save()
+
+		else:
+				message.error(request,'the password does not match')
+				return render(request,'shop-standart-forms.html')
+		
+
+
+
+
+	return render(request,'shop-standart-forms.html')
